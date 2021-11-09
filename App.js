@@ -14,12 +14,11 @@ export default function App() {
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (_, { dx, dy }) =>
         POSITION.setValue({ x: dx, y: dy }),
+      onPanResponderGrant: () => {
+        POSITION.setOffset({ x: POSITION.x._value, y: POSITION.y._value });
+      },
       onPanResponderRelease: () => {
-        Animated.spring(POSITION, {
-          toValue: { x: 0, y: 0 },
-          useNativeDriver: false,
-          bounciness: 20,
-        }).start();
+        POSITION.flattenOffset();
       },
     })
   ).current;
