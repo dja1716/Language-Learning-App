@@ -34,12 +34,16 @@ export default function App() {
     toValue: -500,
     tension: 5,
     useNativeDriver: true,
+    restSpeedThreshold: 200,
+    restDisplacementThreshold: 200,
   });
 
   const goRight = Animated.spring(position, {
     toValue: 500,
     tension: 5,
     useNativeDriver: true,
+    restSpeedThreshold: 200,
+    restDisplacementThreshold: 200,
   });
   const [index, setIndex] = useState(0);
   const onDismiss = () => {
