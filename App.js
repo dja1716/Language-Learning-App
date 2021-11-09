@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components/native";
-import { Animated, PanResponder, View } from "react-native";
+import { Animated, PanResponder, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import icons from "./icons";
 
 export default function App() {
   const scale = useRef(new Animated.Value(1)).current;
@@ -40,23 +41,28 @@ export default function App() {
     tension: 5,
     useNativeDriver: true,
   });
-
+  const [index, setIndex] = useState(0);
+  const onDismiss = () => {
+    scale.setValue(1);
+    position.setValue(0);
+    setIndex((prev) => prev + 1);
+  };
   const closePress = () => {
-    goLeft.start();
+    goLeft.start(onDismiss);
   };
 
   const checkPress = () => {
-    goRight.start();
+    goRight.start(onDismiss);
   };
 
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderRelease: (_, { dx }) => {
-        if (dx < -250) {
-          goLeft.start();
-        } else if (dx > 250) {
-          goRight.start();
+        if (dx < -150) {
+          goLeft.start(onDismiss);
+        } else if (dx > 150) {
+          goRight.start(onDismiss);
         } else {
           Animated.parallel([onPressOut, goCenter]).start();
         }
@@ -77,7 +83,7 @@ export default function App() {
     <Container>
       <CardContainer>
         <AnimatedCard style={{ transform: [{ scale: secondScale }] }}>
-          <Ionicons name="beer" color="#192a56" size={98} />
+          <Ionicons name={icons[index + 1]} color="#192a56" size={98} />
         </AnimatedCard>
         <AnimatedCard
           style={{
@@ -89,7 +95,7 @@ export default function App() {
           }}
           {...panResponder.panHandlers}
         >
-          <Ionicons name="pizza" color="#192a56" size={98} />
+          <Ionicons name={icons[index]} color="#192a56" size={98} />
         </AnimatedCard>
       </CardContainer>
 
